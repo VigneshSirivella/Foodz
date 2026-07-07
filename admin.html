@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Admin Dashboard</title>
+    <style>
+        :root {
+            --primary: #f97316;
+            --primary-hover: #ea580c;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--card-bg);
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+        }
+
+        .nav-link.active {
+            background-color: #fff7ed;
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        /* Specific Table Elements */
+        .user-email {
+            font-weight: 500;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .item-qty {
+            color: var(--text-muted);
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .price-badge {
+            background-color: #ecfccb;
+            color: #4d7c0f;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .date-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Loading State */
+        .loading {
+            padding: 3rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--primary);
+            animation: spin 1s ease infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">🍴</div>
+            Admin Dashboard
+        </div>
+        <div class="nav-links">
+            <div class="nav-link active" onclick="switchTab('orders')">Orders</div>
+            <div class="nav-link" onclick="switchTab('users')">Users</div>
+            <a href="/total.html" class="nav-link" style="text-decoration:none; color:inherit;">Back to Store</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Orders Section -->
+        <div id="orders-section">
+            <div class="header">
+                <h1>Recent Orders</h1>
+            </div>
+            <div class="card">
+                <div id="orders-loading" class="loading">
+                    <div class="spinner"></div>
+                    Loading orders...
+                </div>
+                <table id="orders-table" class="hidden">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users-section" class="hidden">
+            <div class="header">
+                <h1>Registered Users</h1>
+            </div>
+            <div class="card">
+                <div id="users-loading" class="loading">
+                    <div class="spinner"></div>
+                    Loading users...
+                </div>
+                <table id="users-table" class="hidden">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Email Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Update Active Link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Hide all sections
+            document.getElementById('orders-section').classList.add('hidden');
+            document.getElementById('users-section').classList.add('hidden');
+
+            // Show selected section
+            document.getElementById(`${tab}-section`).classList.remove('hidden');
+
+            // Fetch data if needed
+            if(tab === 'orders') fetchOrders();
+            if(tab === 'users') fetchUsers();
+        }
+
+        function formatCartItems(items) {
+            if (!items || items.length === 0) return '<span class="text-muted">No items</span>';
+            return items.map(item => `
+                <div class="item-row">
+                    <span><span class="item-qty">${item.qty}x</span> ${item.name}</span>
+                    <span style="color: #64748b">₹${(item.price * item.qty).toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };
+            return new Date(dateString + 'Z').toLocaleDateString(undefined, options);
+        }
+
+        async function fetchOrders() {
+            try {
+                const response = await fetch('/api/admin/orders');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('orders-body');
+                tbody.innerHTML = ''; // clear
+
+                if (data.orders && data.orders.length > 0) {
+                    data.orders.forEach(order => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>#${order.id}</td>
+                                <td class="user-email">${order.user_email}</td>
+                                <td>${formatCartItems(order.cart_items)}</td>
+                                <td><span class="price-badge">₹${order.total_price.toFixed(2)}</span></td>
+                                <td class="date-text">${formatDate(order.created_at)}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem;">No orders found.</td></tr>';
+                }
+
+                document.getElementById('orders-loading').classList.add('hidden');
+                document.getElementById('orders-table').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+                document.getElementById('orders-loading').innerText = "Error loading data.";
+            }
+        }
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/admin/users');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('users-body');
+                tbody.innerHTML = ''; // clear
+
+                if (data.users && data.users.length > 0) {
+                    data.users.forEach(user => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${user.id}</td>
+                                <td class="user-email">${user.email}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding: 2rem;">No users found.</td></tr>';
+                }
+
+                document.getElementById('users-loading').classList.add('hidden');
+                document.getElementById('users-table').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error fetching users:", error);
+                document.getElementById('users-loading').innerText = "Error loading data.";
+            }
+        }
+
+        // Initialize fetching
+        fetchOrders();
+    </script>
+</body>
+</html>
