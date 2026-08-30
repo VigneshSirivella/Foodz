@@ -221,10 +221,11 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
 
         # Categories API
         if path == '/api/categories':
-            conn, db_type = get_db_connection()
-            cursor = conn.cursor()
             categories = []
+            conn = None
             try:
+                conn, db_type = get_db_connection()
+                cursor = conn.cursor()
                 cursor.execute("SELECT id, name, icon, image_url FROM categories ORDER BY id ASC")
                 rows = cursor.fetchall()
                 for r in rows:
@@ -232,7 +233,8 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 print(f"Error fetching categories: {e}")
             finally:
-                conn.close()
+                if conn:
+                    conn.close()
             self.send_json_response({"categories": categories})
             return
 
@@ -242,10 +244,11 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
             search_filter = query.get('search', [None])[0]
             veg_only = query.get('veg', ['0'])[0] == '1'
 
-            conn, db_type = get_db_connection()
-            cursor = conn.cursor()
             restaurants = []
+            conn = None
             try:
+                conn, db_type = get_db_connection()
+                cursor = conn.cursor()
                 sql = "SELECT id, name, cuisine, rating, delivery_time, cost_for_two, image_url, is_featured, address FROM restaurants"
                 conditions = []
                 params = []
@@ -284,7 +287,8 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 print(f"Error fetching restaurants: {e}")
             finally:
-                conn.close()
+                if conn:
+                    conn.close()
             self.send_json_response({"restaurants": restaurants})
             return
 
@@ -295,11 +299,12 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_response("Restaurant ID required", 400)
                 return
 
-            conn, db_type = get_db_connection()
-            cursor = conn.cursor()
             restaurant_data = None
             menu_items = []
+            conn = None
             try:
+                conn, db_type = get_db_connection()
+                cursor = conn.cursor()
                 q_rest = "SELECT id, name, cuisine, rating, delivery_time, cost_for_two, image_url, is_featured, address FROM restaurants WHERE id = %s" if db_type == 'postgresql' else "SELECT id, name, cuisine, rating, delivery_time, cost_for_two, image_url, is_featured, address FROM restaurants WHERE id = ?"
                 cursor.execute(q_rest, (rest_id,))
                 row = cursor.fetchone()
@@ -323,7 +328,8 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 print(f"Error fetching restaurant menu: {e}")
             finally:
-                conn.close()
+                if conn:
+                    conn.close()
 
             if not restaurant_data:
                 self.send_error_response("Restaurant not found", 404)
@@ -333,10 +339,11 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
 
         # All Menu Items API
         if path == '/api/menu-items':
-            conn, db_type = get_db_connection()
-            cursor = conn.cursor()
             items = []
+            conn = None
             try:
+                conn, db_type = get_db_connection()
+                cursor = conn.cursor()
                 cursor.execute("""
                     SELECT m.id, m.restaurant_id, m.category_id, m.name, m.description, m.price, m.image_url, m.is_veg, m.is_bestseller, m.rating, r.name
                     FROM menu_items m
@@ -353,7 +360,8 @@ class SwiggyHandler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 print(f"Error fetching menu items: {e}")
             finally:
-                conn.close()
+                if conn:
+                    conn.close()
 
             if not items:
                 items = [
