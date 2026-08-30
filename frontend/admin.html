@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodz Admin Dashboard - Foodz Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary: #fc8019;
+            --primary-dark: #e56f0c;
+            --bg-color: #f4f5f8;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --green: #118a42;
+            --blue: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding-bottom: 50px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: #ffffff;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #fc8019, #e56f0c);
+            color: white;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-tab {
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .nav-tab.active {
+            background-color: #fff7ed;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .store-btn {
+            background: var(--text-dark);
+            color: white;
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .store-btn:hover {
+            background: var(--primary);
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 1250px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* METRICS CARDS */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .metric-sub {
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* PGADMIN & DB WIDGET */
+        .db-widget {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .db-info h3 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .db-info p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .db-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .sql-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .sql-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* TABLES */
+        .card-table {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            padding: 14px 20px;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .status-select {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .status-Placed { background: #fef3c7; color: #b45309; }
+        .status-Preparing { background: #e0f2fe; color: #0369a1; }
+        .status-Out-for-Delivery { background: #fae8ff; color: #86198f; }
+        .status-Delivered { background: #dcfce7; color: #15803d; }
+        .status-Cancelled { background: #fee2e2; color: #b91c1c; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">🛵</div>
+            <span>Foodz Admin Portal</span>
+        </div>
+        <div class="nav-links">
+            <div class="nav-tab active" onclick="switchSection('orders')">📦 Orders</div>
+            <div class="nav-tab" onclick="switchSection('users')">👥 Users</div>
+            <div class="nav-tab" onclick="switchSection('pgadmin')">🐘 PostgreSQL & pgAdmin4</div>
+            <a href="/index.html" class="store-btn">← Back to Foodz App</a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <!-- METRICS -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">Total Revenue</div>
+                <div class="metric-value" id="statRevenue">₹0.00</div>
+                <div class="metric-sub">▲ 18.5% from orders</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Total Orders</div>
+                <div class="metric-value" id="statOrders">0</div>
+                <div class="metric-sub">▲ Live orders tracked</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Active Deliveries</div>
+                <div class="metric-value" id="statActive" style="color:var(--primary);">0</div>
+                <div class="metric-sub">Cooking / On the way</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Registered Users</div>
+                <div class="metric-value" id="statUsers">0</div>
+                <div class="metric-sub">Customer accounts</div>
+            </div>
+        </div>
+
+        <!-- PGADMIN & DB STATUS BANNER -->
+        <div class="db-widget">
+            <div class="db-info">
+                <h3>🐘 PostgreSQL & pgAdmin4 Integration Status: <span id="dbStatusText" style="color:#38bdf8;">Checking...</span></h3>
+                <p>Host: <b>localhost:5432</b> | Database: <b>foodz_db</b> | User: <b>postgres</b>. All tables & query tools ready for pgAdmin4.</p>
+            </div>
+            <div class="db-actions">
+                <a href="/swiggy_schema.sql" target="_blank" class="sql-btn">📄 View swiggy_schema.sql</a>
+                <a href="/swiggy_seed.sql" target="_blank" class="sql-btn">🌱 View swiggy_seed.sql</a>
+            </div>
+        </div>
+
+        <!-- ORDERS SECTION -->
+        <div id="orders-section" class="card-table">
+            <div class="table-header">
+                <h2>Live Customer Orders</h2>
+                <button onclick="fetchAdminOrders()" style="padding:8px 16px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer;">🔄 Refresh</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Restaurant</th>
+                        <th>Items & Qty</th>
+                        <th>Total Amount</th>
+                        <th>Live Status</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-body">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- USERS SECTION -->
+        <div id="users-section" class="card-table hidden">
+            <div class="table-header">
+                <h2>Registered Swiggy Users</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Phone Number</th>
+                        <th>Joined Date</th>
+                    </tr>
+                </thead>
+                <tbody id="users-body">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PGADMIN GUIDE SECTION -->
+        <div id="pgadmin-section" class="card-table hidden" style="padding: 30px;">
+            <h2 style="font-size:24px; font-weight:800; margin-bottom:15px;">🐘 Connecting pgAdmin4 to Foodz Database</h2>
+            <p style="color:var(--text-muted); margin-bottom:20px;">Follow these steps to view and manage all database tables inside your local pgAdmin4 app:</p>
+            
+            <ol style="margin-left:20px; line-height:2; font-size:15px;">
+                <li>Open <b>pgAdmin4</b> application on your computer.</li>
+                <li>Right-click on <b>Servers</b> → <b>Register</b> → <b>Server...</b></li>
+                <li>In the <b>General</b> tab, name it: <code>Foodz Swiggy Postgres</code></li>
+                <li>In the <b>Connection</b> tab, enter:
+                    <ul>
+                        <li><b>Host name/address:</b> <code>localhost</code></li>
+                        <li><b>Port:</b> <code>5432</code></li>
+                        <li><b>Maintenance database:</b> <code>postgres</code> or <code>foodz_db</code></li>
+                        <li><b>Username:</b> <code>postgres</code></li>
+                        <li><b>Password:</b> <code>password</code> (or your local Postgres password)</li>
+                    </ul>
+                </li>
+                <li>Click <b>Save</b> and expand <b>Databases</b> → <code>foodz_db</code> → <b>Schemas</b> → <b>public</b> → <b>Tables</b>.</li>
+                <li>You will see all tables: <code>users</code>, <code>restaurants</code>, <code>categories</code>, <code>menu_items</code>, <code>orders</code>, <code>reviews</code>!</li>
+                <li>To run custom queries, right-click <code>foodz_db</code> and open <b>Query Tool</b>. Open and execute <code>swiggy_schema.sql</code> and <code>swiggy_seed.sql</code>!</li>
+            </ol>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            fetchStats();
+            fetchAdminOrders();
+            fetchAdminUsers();
+        });
+
+        function switchSection(section) {
+            $(".nav-tab").removeClass("active");
+            event.target.classList.add("active");
+
+            $("#orders-section").addClass("hidden");
+            $("#users-section").addClass("hidden");
+            $("#pgadmin-section").addClass("hidden");
+
+            $(`#${section}-section`).removeClass("hidden");
+        }
+
+        function fetchStats() {
+            fetch('/api/admin/stats')
+                .then(res => res.json())
+                .then(data => {
+                    $("#statRevenue").text(`₹${data.total_revenue.toFixed(2)}`);
+                    $("#statOrders").text(data.total_orders);
+                    $("#statActive").text(data.active_orders);
+                    $("#statUsers").text(data.total_users);
+
+                    if(data.db_type === 'postgresql') {
+                        $("#dbStatusText").text("Connected to PostgreSQL").css("color", "#38bdf8");
+                    } else {
+                        $("#dbStatusText").text("SQLite Fallback (pgAdmin4 Ready)").css("color", "#f59e0b");
+                    }
+                });
+        }
+
+        function fetchAdminOrders() {
+            fetch('/api/admin/orders')
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = $("#orders-body");
+                    tbody.empty();
+                    const orders = data.orders || [];
+
+                    if (orders.length === 0) {
+                        tbody.html('<tr><td colspan="7" style="text-align:center; padding:30px;">No orders placed yet.</td></tr>');
+                        return;
+                    }
+
+                    orders.forEach(o => {
+                        let itemsHtml = '';
+                        if(o.cart_items && o.cart_items.length > 0) {
+                            itemsHtml = o.cart_items.map(i => `${i.qty}x ${i.name}`).join(', ');
+                        } else {
+                            itemsHtml = 'Custom Order';
+                        }
+
+                        const statusClass = `status-${o.status.replace(/ /g, '-')}`;
+
+                        tbody.append(`
+                            <tr>
+                                <td><b>#${o.id}</b></td>
+                                <td>${o.user_email}<br><small style="color:var(--text-muted);">📍 ${o.delivery_address}</small></td>
+                                <td><b>${o.restaurant_name}</b></td>
+                                <td>${itemsHtml}</td>
+                                <td><b style="color:var(--green);">₹${o.total_price.toFixed(2)}</b></td>
+                                <td>
+                                    <select class="status-select ${statusClass}" onchange="updateOrderStatus(${o.id}, this.value)">
+                                        <option value="Placed" ${o.status === 'Placed' ? 'selected' : ''}>Placed</option>
+                                        <option value="Preparing" ${o.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
+                                        <option value="Out for Delivery" ${o.status === 'Out for Delivery' ? 'selected' : ''}>Out for Delivery</option>
+                                        <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                                        <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                    </select>
+                                </td>
+                                <td>${o.created_at}</td>
+                            </tr>
+                        `);
+                    });
+                });
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            fetch('/api/admin/order-status', {
+                method: 'POST',
+                body: JSON.stringify({order_id: orderId, status: newStatus}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.error) alert(data.error);
+                else {
+                    fetchStats();
+                    fetchAdminOrders();
+                }
+            });
+        }
+
+        function fetchAdminUsers() {
+            fetch('/api/admin/users')
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = $("#users-body");
+                    tbody.empty();
+                    const users = data.users || [];
+
+                    if (users.length === 0) {
+                        tbody.html('<tr><td colspan="5" style="text-align:center; padding:30px;">No registered users found.</td></tr>');
+                        return;
+                    }
+
+                    users.forEach(u => {
+                        tbody.append(`
+                            <tr>
+                                <td>${u.id}</td>
+                                <td><b>${u.name}</b></td>
+                                <td>${u.email}</td>
+                                <td>${u.phone || 'N/A'}</td>
+                                <td>${u.created_at}</td>
+                            </tr>
+                        `);
+                    });
+                });
+        }
+    </script>
+</body>
+</html>
