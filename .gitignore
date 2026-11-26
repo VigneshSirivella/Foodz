@@ -1,17 +1,25 @@
-# Environment variables / secrets
+# Environment variables / secrets (NEVER COMMIT)
 .env
 .env.*
 !.env.example
 
-# Python cache
+# Database files & local configs
+*.sqlite
+*.sqlite3
+database.sqlite
+db_config.json
+**/db_config.json
+
+# Python cache & compiled files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environments
+# Virtual environments & external packages
 venv/
 .venv/
 env/
+libs/
 
 # IDE / OS files
 .vscode/
@@ -23,5 +31,7 @@ env/
 
 # Node dependencies
 node_modules/
-db_config.json
-libs/
+.vercel
+
+# Local SQLite database
+/database.sqlite

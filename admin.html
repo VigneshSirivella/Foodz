@@ -271,6 +271,7 @@
 
         .hidden { display: none; }
     </style>
+    <script src="config.js"></script>
 </head>
 <body>
 
@@ -417,7 +418,7 @@
         }
 
         function fetchStats() {
-            fetch('/api/admin/stats')
+            fetch(apiUrl('/api/admin/stats'))
                 .then(res => res.json())
                 .then(data => {
                     $("#statRevenue").text(`₹${data.total_revenue.toFixed(2)}`);
@@ -434,7 +435,7 @@
         }
 
         function fetchAdminOrders() {
-            fetch('/api/admin/orders')
+            fetch(apiUrl('/api/admin/orders'))
                 .then(res => res.json())
                 .then(data => {
                     const tbody = $("#orders-body");
@@ -480,7 +481,7 @@
         }
 
         function updateOrderStatus(orderId, newStatus) {
-            fetch('/api/admin/order-status', {
+            fetch(apiUrl('/api/admin/order-status'), {
                 method: 'POST',
                 body: JSON.stringify({order_id: orderId, status: newStatus}),
                 headers: {'Content-Type': 'application/json'}
@@ -496,7 +497,7 @@
         }
 
         function fetchAdminUsers() {
-            fetch('/api/admin/users')
+            fetch(apiUrl('/api/admin/users'))
                 .then(res => res.json())
                 .then(data => {
                     const tbody = $("#users-body");
