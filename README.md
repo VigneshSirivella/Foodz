@@ -1,83 +1,230 @@
-# 🛵 Swiggy Food Delivery Application & PostgreSQL (pgAdmin4) Integration
+# 🍔 Foodz – Online Food Ordering & Restaurant Management System
 
-Welcome to the **Next-Level Swiggy Food Delivery Application**! This project is organized into two separate folders: **`frontend/`** and **`backend/`**.
+<p align="center">
+  <strong>A Full-Stack Web Application for Online Food Ordering</strong>
+</p>
 
----
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JavaScript-orange" />
+  <img src="https://img.shields.io/badge/Backend-Python-blue" />
+  <img src="https://img.shields.io/badge/Database-PostgreSQL-336791" />
+  <img src="https://img.shields.io/badge/Status-Deployment%20Ready-success" />
+</p>
 
-## 📂 Project Architecture
+## 📌 Project Overview
 
+**Foodz** is a full-stack online food ordering and restaurant management web application designed to make food ordering simple and convenient.
+
+The application provides customers with an interface to explore food items, manage their cart, register or log in, and place food orders. It also provides an administrative dashboard to manage and monitor customer orders.
+
+The project uses HTML, CSS, and JavaScript for the frontend, Python for backend processing, and PostgreSQL for database management.
+
+## 🎯 Objectives
+
+- Develop a user-friendly online food ordering platform.
+- Provide secure user registration and authentication.
+- Allow customers to browse food items and place orders.
+- Maintain customer, menu, and order information in a database.
+- Provide an admin dashboard for order management.
+- Deploy the application using cloud hosting services.
+
+## ✨ Features
+
+### 👤 Customer Module
+
+- User registration and login.
+- Email OTP verification.
+- Browse available food items.
+- View food item details and prices.
+- Add and manage items in the cart.
+- Place food orders.
+- Access customer-related information.
+
+### 🛠️ Admin Module
+
+- Administrative login.
+- Admin dashboard.
+- View and manage customer orders.
+- Monitor order information.
+- Manage restaurant operations through the dashboard.
+
+### 🔐 Security Features
+
+- Environment-based configuration for sensitive credentials.
+- PostgreSQL connections with SSL support.
+- CORS configuration for frontend-backend communication.
+- Sensitive file access restrictions.
+- Production database configuration separated from local development.
+
+## 🧰 Technology Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | HTML5, CSS3, JavaScript |
+| Backend | Python |
+| Database | PostgreSQL |
+| Database Driver | psycopg2 |
+| Frontend Hosting | Vercel |
+| Backend Hosting | Render |
+| Database Hosting | Supabase |
+| Version Control | Git, GitHub |
+
+## 🏗️ System Architecture
+
+```text
+              CUSTOMER / ADMIN
+                     |
+                     v
+             FRONTEND (VERCEL)
+              HTML, CSS, JS
+                     |
+                     v
+              PYTHON BACKEND
+                  (RENDER)
+                     |
+                     v
+             POSTGRESQL DATABASE
+                 (SUPABASE)
 ```
+
+The frontend communicates with the Python backend through API requests. The backend processes requests and interacts with the PostgreSQL database to store and retrieve application information.
+
+## 📂 Project Structure
+
+```text
 Foodz/
 │
-├── 🎨 frontend/                # Frontend Web Application (Swiggy UI & Admin Portal)
-│   ├── index.html              # Main Swiggy Food Delivery App & Live Tracking
-│   ├── admin.html              # Swiggy Admin Management Dashboard
-│   └── images/                 # Dish & Food Media Assets
-│       ├── dum_biryani.jpeg
-│       ├── dosa.jpeg
-│       ├── pizza.jpg
-│       ├── chicken_burger.jpg
-│       └── ...
+├── frontend/
+│   ├── index.html
+│   ├── admin.html
+│   ├── config.js
+│   ├── vercel.json
+│   └── images/
 │
-├── ⚙️ backend/                 # Backend REST API Server & PostgreSQL Connectivity
-│   ├── server.py               # REST API HTTP Server (Supports PostgreSQL & SQLite)
-│   ├── init_db.py              # Python Database Initialization & Auto-Seeder
-│   ├── db_config.json          # PostgreSQL Connection Settings
-│   ├── swiggy_schema.sql       # PostgreSQL DDL Table Creation Script for pgAdmin4
-│   ├── swiggy_seed.sql         # PostgreSQL Seed Dataset for pgAdmin4
-│   └── database.sqlite         # SQLite Fallback Database File
+├── backend/
+│   ├── server.py
+│   ├── init_db.py
+│   ├── requirements.txt
+│   ├── swiggy_schema.sql
+│   ├── swiggy_seed.sql
+│   └── images/
 │
-└── README.md                   # Project Documentation & Setup Guide
+├── images/
+├── index.html
+├── admin.html
+├── server.py
+├── init_db.py
+├── config.js
+├── requirements.txt
+├── swiggy_schema.sql
+├── swiggy_seed.sql
+├── render.yaml
+├── vercel.json
+├── .env.example
+├── .gitignore
+├── DEPLOYMENT.md
+└── README.md
 ```
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/VigneshSirivella/Foodz.git
+cd Foodz
+```
+
+### 2. Install Python Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file using `.env.example` as a reference.
+
+Configure the required database and email settings.
+
+**Important:** Never upload your actual `.env` file or credentials to GitHub.
+
+### 4. Configure PostgreSQL Database
+
+Create a PostgreSQL database and execute the SQL files in the following order:
+
+1. `swiggy_schema.sql`
+2. `swiggy_seed.sql`
+
+The schema creates the required database tables, and the seed file inserts the initial application data.
+
+### 5. Start the Backend Server
+
+```bash
+python server.py
+```
+
+Open the application using the local server address configured by the backend.
+
+## ☁️ Cloud Deployment
+
+Foodz is prepared for deployment using the following services:
+
+| Service | Purpose |
+|---|---|
+| GitHub | Source code management |
+| Vercel | Frontend hosting |
+| Render | Python backend hosting |
+| Supabase | PostgreSQL database hosting |
+
+Detailed instructions are available in **[DEPLOYMENT.md](DEPLOYMENT.md)**.
+
+## 🖥️ Application Screenshots
+
+Add actual screenshots of your application here.
+
+Suggested screenshots:
+
+- Customer home page
+- Food menu page
+- Shopping cart
+- Login and registration pages
+- Admin dashboard
+- Order management page
+
+Example:
+
+```markdown
+![Foodz Home Page](screenshots/home.png)
+![Foodz Admin Dashboard](screenshots/admin.png)
+```
+
+## 🔮 Future Enhancements
+
+- Online payment gateway integration.
+- Live order tracking.
+- Restaurant ratings and reviews.
+- Improved order notifications.
+- More advanced admin analytics.
+- Mobile-responsive improvements.
+
+## 👨‍💻 Project Information
+
+| Detail | Information |
+|---|---|
+| Project Name | Foodz |
+| Project Type | Full-Stack Web Application |
+| Domain | Web Development |
+| Frontend | HTML, CSS, JavaScript |
+| Backend | Python |
+| Database | PostgreSQL |
+
+## 📜 License
+
+This project is developed for academic and educational purposes.
 
 ---
 
-## 🚀 How to Run the Application
-
-1. Open your terminal in the `backend/` directory:
-   ```bash
-   cd backend
-   python3 server.py
-   ```
-
-2. Open your web browser:
-   - **User App**: [http://localhost:3000/](http://localhost:3000/)
-   - **Admin Dashboard**: [http://localhost:3000/admin.html](http://localhost:3000/admin.html)
-
----
-
-## 🐘 Connecting PostgreSQL & Viewing Tables in pgAdmin4
-
-### 1️⃣ Database Configuration (`backend/db_config.json`)
-Modify `backend/db_config.json` with your local PostgreSQL credentials:
-```json
-{
-  "host": "localhost",
-  "port": 5432,
-  "database": "foodz_db",
-  "user": "postgres",
-  "password": "your_pgadmin_password"
-}
-```
-
-### 2️⃣ Viewing Database Tables in pgAdmin4
-
-1. Launch **pgAdmin4**.
-2. Right-click **Servers** ➔ **Register** ➔ **Server...**
-3. In the **Connection** tab, enter:
-   - **Host**: `localhost`
-   - **Port**: `5432`
-   - **Database**: `postgres` (or `foodz_db`)
-   - **Username**: `postgres`
-   - **Password**: Enter your pgAdmin4 password.
-4. Right-click `foodz_db` ➔ **Query Tool**.
-5. Open and execute:
-   - [`backend/swiggy_schema.sql`](file:///home/rgukt/Desktop/Foodz/backend/swiggy_schema.sql)
-   - [`backend/swiggy_seed.sql`](file:///home/rgukt/Desktop/Foodz/backend/swiggy_seed.sql)
-6. Expand `foodz_db` ➔ `Schemas` ➔ `public` ➔ `Tables` to view all 6 tables:
-   - 👥 `users`
-   - 🏪 `restaurants`
-   - 🍕 `categories`
-   - 🍲 `menu_items`
-   - 📦 `orders`
-   - ⭐ `reviews`
+<p align="center">
+  <strong>Foodz – Making Food Ordering Simple and Convenient 🍔</strong>
+</p>
