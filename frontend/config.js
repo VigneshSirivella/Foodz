@@ -8,7 +8,7 @@
 
     // Deployed Render backend URL fallback when hosted on Vercel
     // If Vercel rewrites (/api/...) are active, relative requests ('') also proxy directly
-    const DEFAULT_CLOUD_BACKEND = 'https://foodz-backend.onrender.com';
+    const DEFAULT_CLOUD_BACKEND = 'https://foodz-backend-4ncx.onrender.com';
 
     const configuredUrl = window.__FOODZ_API_BASE_URL__ ||
                           localStorage.getItem('FOODZ_API_BASE_URL') ||
